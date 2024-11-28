@@ -1,9 +1,9 @@
 from model.student import Student
 
-class InputView():
+class InputView:
 
     @staticmethod
-    def sign_up_student(self):
+    def print_sign_up(self):
         print("\n=== 학생 등록 ===")
         student_number = input("학번: ")
         password = input("비밀번호: ")
