@@ -8,15 +8,18 @@ _cls = [  # 강의 정보를 저장하는 리스트
     ["GEC1102-S21", 2024, 1, "인간의가치탐색", 3, 20, 0],
     ["PHYS3204-00", 2024, 1, "열및통계물리1", 3, 10, 0],
     ["SOJUJOA-00", 2024, 1, "술의역사", 3, 15, 0],
-    ["CHUKGUJOA-01", 2024, 1, "축구", 1, 22, 0]
-    ["PHYS3203-01",2024, 1, "전자기학2",3,10,0]
-    ["DISP2103-00",2024,1,"전자회로",3,10,0]
-    ["PHYS4201-00",2024,1,"졸업논문",0,100,0]
-    ["UMAYGETF-01",2024,1,"열및통계물리1",3,20,0]
-    ["PHYS3310-00",2024,1,"정보물리학",3,20,0]
-    ["GEE1345-S00",2024,1,"파이썬으로배우는소프트웨어코딩",3,20,0]
-    ["PHYS2302-00",2024,1,"수리물리학1",3,20,0]
+    ["CHUKGUJOA-01", 2024, 1, "축구", 1, 22, 0],
+    ["PHYS3203-01", 2024, 1, "전자기학2", 3, 10, 0],
+    ["DISP2103-00", 2024, 1, "전자회로", 3, 10, 0],
+    ["PHYS4201-00", 2024, 1, "졸업논문", 0, 100, 0],
+    ["UMAYGETF-01", 2024, 1, "열및통계물리1", 3, 20, 0],
+    ["PHYS3310-00", 2024, 1, "정보물리학", 3, 20, 0],
+    ["GEE1345-S00", 2024, 1, "파이썬으로배우는소프트웨어코딩", 3, 20, 0],
+    ["PHYS2302-00", 2024, 1, "수리물리학1", 3, 20, 0]
 ]
+
+# 필수과목 리스트
+todo_sugang_list = ["PHYS3305-01", "PHYS2201-01", "PHYS3204-00", "PHYS3203-01", "PHYS4201-00"]
 
 _st = []   # 학생 정보를 저장하는 리스트
 
@@ -45,7 +48,6 @@ class Manage:
             f_index = self.search_index(cls_code)
             if f_index != -1 and _cls[f_index][6] > 0:
                 _cls[f_index][6] -= 1
-                # 수강 취소 메시지는 그대로 둡니다.
                 print(f"[INFO] {cls_code}: 수강 신청이 취소되어 현재 신청자 수 {_cls[f_index][6]}/{_cls[f_index][5]}")
 
     def search_index(self, cls_code):
@@ -70,7 +72,7 @@ class Manage:
 class Student:
     def register(self, st_id, st_pass, st_num, st_name, st_dept, st_year):
         with st_lock:
-            _st.append([st_id, st_pass, st_num, st_name, st_dept, st_year, []])  # 빈 리스트로 수강 과목 초기화
+            _st.append([st_id, st_pass, st_num, st_name, st_dept, st_year, [], 0])  # 빈 리스트로 수강 과목 초기화, 총 학점 0으로 초기화
 
 # 수강신청 관리 클래스
 class Sugang:
@@ -116,8 +118,6 @@ def main():
     st_year = int(input("학년: "))
     students.register(st_id, st_pass, st_num, st_name, st_dept, st_year)
     print(f"[SUCCESS] 학생 {st_name}({st_id}) 등록 완료.")
-
-    sugang_list = []  # 학생이 수강신청한 과목을 저장하는 리스트
 
     auto_thread = None
     logged_in = False
@@ -165,12 +165,29 @@ def main():
             # 수강 신청
             cls_code = input("수강할 강의 코드: ")
 
+            f_index_st = sugang.search_index(logged_in_user)
+            if f_index_st == -1:
+                print("[ERROR] 학생 ID를 찾을 수 없습니다.")
+                continue
+
+            f_index_cls = manage.search_index(cls_code)
+            if f_index_cls == -1:
+                print(f"[ERROR] {cls_code}: 강의 코드를 찾을 수 없습니다.")
+                continue
+
+            course_credits = _cls[f_index_cls][4]
+            current_total_credits = _st[f_index_st][7]
+
+            if current_total_credits + course_credits > 18:
+                print("수강가능학점을 초과했습니다")
+                continue
+
             if not manage.add_subscription(cls_code):
                 # 수강 신청 실패 시 (정원 초과 등)
                 continue
 
             if sugang.add_sugang_list(logged_in_user, cls_code):
-                sugang_list.append(cls_code)  # 수강신청한 과목 리스트에 추가
+                _st[f_index_st][7] += course_credits  # 학생의 총 학점 업데이트
             else:
                 # 학생 수강 목록 추가 실패 시 (학생 ID 오류 등)
                 # 이미 manage.add_subscription에서 수강자 수를 증가시켰으므로 취소해야 함
@@ -190,20 +207,37 @@ def main():
             if auto_thread is not None:
                 auto_thread.join()  # 스레드가 종료되길 기다림
 
-            # 종료 시 로그인한 학생의 수강 신청한 과목 출력
+            # 종료 시 로그인한 학생의 수강 신청한 과목 출력 및 상태 확인
             if logged_in_user is not None:
-                print("\n=== 수강 신청한 과목 목록 ===")
-                for cls_code in sugang_list:
-                    lecture_name = manage.get_lecture(cls_code)
-                    if lecture_name:
-                        print(f"강의명: {lecture_name} (코드: {cls_code})")
-                print("=================")
+                f_index = sugang.search_index(logged_in_user)
+                if f_index != -1:
+                    sugang_list = _st[f_index][6]  # 학생의 수강신청 리스트
+                    print("\n=== 수강 신청한 과목 목록 ===")
+                    for cls_code in sugang_list:
+                        lecture_name = manage.get_lecture(cls_code)
+                        if lecture_name:
+                            print(f"강의명: {lecture_name} (코드: {cls_code})")
+                    print("=================")
+
+                    # 상태값 계산
+                    if set(sugang_list) == set(todo_sugang_list):
+                        state = 0
+                    elif set(todo_sugang_list).issubset(set(sugang_list)):
+                        state = 1
+                    else:
+                        state = -1
+
+                    # 상태에 따른 메시지 출력
+                    if state == 0:
+                        print("필수과목만 신청하셨습니다.")
+                    elif state == 1:
+                        print("필수과목과 선택과목을 모두 신청하셨습니다.")
+                    else:
+                        print("필수과목 중 신청하지 않은 과목이 있습니다.")
             break
 
         else:
-            print('1번에서 4번까지만 고르셔요~")
-
-
+            print('1번에서 4번까지만 고르셔요~')
 
 # 프로그램 실행
 if __name__ == "__main__":
