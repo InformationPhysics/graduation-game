@@ -39,3 +39,25 @@ lectures = [
     Lecture("f", 2024, 1, "축구", 1, 22, 0),
 ]
 
+# 강의 목록을 캡슐화, 탐색 속도 증가하기 위해 사용할 예정
+# 다만 정적으로 미리 선언하던가 데이터베이스를 쓰는게 좋을 것 같음
+class LectureManager():
+    def __init__(self):
+        self.lectures = {}
+
+    def add_lecture(self, lecture): # 강의를 dictionary 형태로 저장한다. 이때 key 값을 강의 코드로 저장하게 한다.
+        if lecture.code in self.lectures:
+            raise ValueError(f"강의 코드 {lecture.code}는 이미 존재합니다.")
+        self.lectures[lecture.code] = lecture
+
+    def remove_lecture(self, lecture_code):
+        if lecture_code in self.lectures:
+            del self.lectures[lecture_code]
+        else:
+            raise ValueError(f"강의 코드 {lecture_code}를 찾을 수 없습니다.")
+
+    def find_lecture(self, lecture_code):
+        return self.lectures.get(lecture_code, None)
+
+    def list_all_lectures(self):
+        return list(self.lectures.values())
