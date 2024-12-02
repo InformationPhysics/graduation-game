@@ -201,7 +201,7 @@ def main():
                     print(f"강의명: {cls[3]}, 코드: {cls[0]}, 현재 신청자 수: {cls[6]}/{cls[5]}")
                 print("=================")
 
-        elif choice == "4":
+        elif choice == "4": 
             print("시스템 종료.")
             stop_auto_increment.set()  # 자동 증가 중지 이벤트 설정
             if auto_thread is not None:
@@ -229,15 +229,31 @@ def main():
 
                     # 상태에 따른 메시지 출력
                     if state == 0:
-                        print("필수과목만 신청하셨습니다.")
-                    elif state == 1:
-                        print("필수과목과 선택과목을 모두 신청하셨습니다.")
-                    else:
-                        print("필수과목 중 신청하지 않은 과목이 있습니다.")
-            break
+                      print("휴…큰일 날 뻔 했다.. 한학기 더 할 뻔 했는데..")
+                      time.sleep(1)
+                      print('듣고 싶은 과목이 좀 더 있었는데 아쉽다..졸업엔 영향 없겠지?')
+                      time.sleep(1)
+                      print('어디보자..양자..역학..열통..졸논.. 전자기.. 학점은 다 채웠고..뭐 빠진 건 없겠지?')
+                      time.sleep(1)
+                      print('음? 기본교양 3/4..? 설마..??? 맞다 토익!!')
+                      time.sleep(1)
+                      print('다행이도 다음주에 신청할 수 있군..근데 마지막이네..반드시 성공하여 인생의 장대한 서막을 울리리라')
+                      time.sleep(1)
+                      print('TOEIC GOGO')
+                     
+                       pass
+
+                       break
 
         else:
             print('1번에서 4번까지만 고르셔요~')
+
+
+
+
+
+
+
 
 # 프로그램 실행
 if __name__ == "__main__":
