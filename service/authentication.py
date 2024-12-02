@@ -1,12 +1,20 @@
 from model.student import Student
 
-
 class AuthenticationService:
+    file_name = "resource/student_information.md"
+    students = {}
+
     def __init__(self):
         self.logged_in_user = None
-        self.users = {
-            "admin": Student(0000, 0000, "admin", "admin"),
-        }
+
+    def load_student_information(self):
+        reader = open(self.file_name, "rt")
+        line = reader.readline()
+        while True:
+            if not line:
+                break
+
+
 
     def login(self, student_number, password):
 
