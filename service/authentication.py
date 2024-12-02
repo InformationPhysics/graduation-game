@@ -1,23 +1,35 @@
 from model.student import Student
 
-
 class AuthenticationService:
+    file_name = "resource/student_information.md"
+
     def __init__(self):
         self.logged_in_user = None
-        self.users = {
-            "admin": Student(0000, 0000, "admin", "admin"),
-        }
 
-    def login(self, student_number, password):
+    def load_student_info_from_file(self, input_id):
+        try:
+            with open(self.file_name, "rt") as reader:
+                reader.readline()  # 첫 줄 헤더 버리기
+                while True:
+                    line = reader.readline()
+                    if not line:
+                        break
 
-        user = self.users.get()
-        if user and user["password"] == password:
-            self.logged_in_user =
-            return user["name"]
+                    student_info = list(map(str.strip, line.strip().split(","))) # 정보 -> list로 저장 -> 분리 후 양쪽 공백 제거
+                    if len(student_info) == 4:
+                        student_id, password, name, department = student_info
+                        if student_id == input_id:
+                            return Student(student_id, password, name, department)
+
+        except FileNotFoundError:
+            print(f"[ERROR] 파일 '{self.file_name}'을 찾을 수 없습니다.")
         return None
 
-    def logout(self):
-        self.logged_in_user = None
+    def login(self, input_id, input_password):
+        student = self.load_student_info_from_file(input_id) # 반환값: Student 인스턴스
 
-    def is_logged_in(self):
-        return self.logged_in_user is not None
+        if student and student.password == input_password:
+            self.logged_in_user = student
+            return student
+
+        return None

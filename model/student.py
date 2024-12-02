@@ -1,20 +1,20 @@
-from abc import *
-
-class AbstractStudent(metaclass=ABC):
-    def __init__(self, student_number, password, name, department):
-        self.student_number = student_number
+class Student:
+    def __init__(self, student_id, password, name, department):
+        self.student_id = student_id
         self.password = password
         self.name = name
         self.department = department
-        self.lectures_registered_for = []
+        self.registered_lecture_codes = [] # 강의 코드 담는 리스트
+        self.total_credits = 18
 
-class Student(AbstractStudent):
-    def register_lecture(self, Lecture):
-        self.lectures_registered_for.append(Lecture)
+    def add_lecture(self, lecture_code):
+        if lecture_code not in self.registered_lecture_codes:
+            self.registered_lecture_codes.append(lecture_code)
 
-    def get_student(self):
+    def remove_lecture(self, lecture_code):
+        if lecture_code in self.registered_lecture_codes:
+            self.registered_lecture_codes.remove(lecture_code)
 
-# TODO 1: 학생정보를 파일에 저장하는 방식 고민하기
-# TODO 2: 학번 유효성 검사, 비밀번호 재확인, 비밀번호 안 보이게 하기
+# TODO 1: 학번 유효성 검사, 비밀번호 재확인, 비밀번호 안 보이게 하기
 
 
