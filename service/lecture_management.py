@@ -18,7 +18,7 @@ class LectureManagementService:
                     if not line:
                         break
 
-                    lecture_info = list(map(str.strip, line.strip().split(","))) # 정보 읽고 양쪽 공백 제거 후 리스트로 저장
+                    lecture_info = list(map(str.strip, line.split(","))) # 정보 읽고 양쪽 공백 제거 후 리스트로 저장
                     if len(lecture_info) == 7:
                         lec_code, lec_year, lec_semester,lec_name, professor, lec_credits, max_students = lecture_info
                         lecture = Lecture(lec_code, lec_year, lec_semester,lec_name, professor, lec_credits, max_students)
