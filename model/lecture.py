@@ -1,8 +1,3 @@
-from abc import *
-import threading
-
-class_lock = threading.Lock()
-
 class Lecture():
     # lec_code, lec_year, lec_semester,lec_name, professor, lec_credits, max_students
     def __init__(self, lec_code, lec_year, lec_semester, lec_name, professor, lec_credit, max_students):

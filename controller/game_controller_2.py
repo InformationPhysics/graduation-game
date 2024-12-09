@@ -1,4 +1,5 @@
 import threading
+import tkinter as tk
 from view.input_view import InputView
 from view.output_view import OutputView
 from service.log_inout_service import Log_inout
@@ -7,12 +8,16 @@ from constant.constant import Choice
 
 class GameController:
     def __init__(self):
+        self.root = tk.Tk()
+        self.view_controller = ViewController(root=self.root)
         self.auth_service = Log_inout()
         self.lecture_service = LectureManagementService()
         self.auto_thread = threading.Thread(target=self.lecture_service.auto_increment_subscriptions, daemon=True)
         self.auto_thread.start()
 
     def start(self):
+        self.root.mainloop()
+
         while True:
             choice = InputView.get_choice()
 
