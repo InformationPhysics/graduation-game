@@ -2,7 +2,7 @@ from model.student import Student
 
 class RegistrationService:
     def register_lecture_to_student(self, student, lecture_code):
-        if lecture_code in student.registered_lectures:
+        if lecture_code in student.registered_lecture_codes:
             print(f"[ERROR] 학생 {student.name}({student.student_id})는 이미 {lecture_code}를 수강 신청했습니다.")
             return False
         student.add_lecture(lecture_code)
