@@ -1,7 +1,7 @@
 from model.student import Student
-from constant.constant import ErrorMessage
+from constants.constant import ErrorMessage
 
-class Log_inout:
+class LoginService:
     file_name = "resource/student_information.md"
 
     def __init__(self):
@@ -28,13 +28,11 @@ class Log_inout:
             print(f"[ERROR] 파일 '{self.file_name}'을 찾을 수 없습니다.")
         return None
 
-    def log_in(self, input_id, input_password):
+    def login(self, input_id, input_password):
         self.load_student_info_from_file()
         student = self.students_dict.get(input_id) # Student 인스턴스
 
         if student and student.password == input_password:
             return student
-        elif student:
-            return ErrorMessage.LOGIN_PASSWORD_ERROR
 
-        return ErrorMessage.LOGIN_ID_ERROR
+        return None

@@ -1,13 +1,13 @@
 import threading
 from view.input_view import InputView
 from view.output_view import OutputView
-from service.log_inout_service import Log_inout
+from service.login_service import LoginService
 from service.lecture_management import LectureManagementService
-from constant.constant import Choice
+from constants.constant import Choice
 
 class GameController:
     def __init__(self):
-        self.auth_service = Log_inout()
+        self.auth_service = LoginService()
         self.lecture_service = LectureManagementService()
         self.auto_thread = threading.Thread(target=self.lecture_service.auto_increment_subscriptions, daemon=True)
         self.auto_thread.start()
@@ -18,7 +18,7 @@ class GameController:
 
             if choice == Choice.LOGIN:
                 student_id, password = InputView.get_login_info()
-                student = self.auth_service.log_in(student_id, password)
+                student = self.auth_service.login(student_id, password)
                 if student:
                     OutputView.print_login_success(student.name)
                 else:
