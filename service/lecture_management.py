@@ -50,3 +50,6 @@ class LectureManagementService:
 
     def find_lecture_with_code(self, lec_code):
         return self.lectures_dict.get(lec_code)
+
+    def get_all_lectures(self):
+        return list(self.lectures_dict.values())

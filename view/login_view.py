@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from service.login_service import LoginService
 
-class LoginWindow(tk.Toplevel):
+class LoginView(tk.Toplevel):
     def __init__(self, main_controller):
         super().__init__()
         self.main_controller = main_controller
