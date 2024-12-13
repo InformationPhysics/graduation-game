@@ -1,12 +1,12 @@
 .idea/
-controller/__pycached__/
-constants/__pycached__/
-model/__pycached__/
-resource/__pycached__/
-service/__pycached__/
-toeic/__pycached__/
-view/__pycached__/
-__pycached__/
+controller/__pycache__/
+constants/__pycache__/
+model/__pycache__/
+resource/__pycache__/
+service/__pycache__/
+toeic/__pycache__/
+view/__pycache__/
+__pycache__/
 
 ### Gradle template
 .gradle
