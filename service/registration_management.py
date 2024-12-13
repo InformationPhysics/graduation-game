@@ -1,5 +1,3 @@
-from model.student import Student
-
 class RegistrationService:
     def register_lecture_to_student(self, student, lecture_code):
         if lecture_code in student.registered_lecture_codes:

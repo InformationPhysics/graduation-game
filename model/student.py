@@ -5,7 +5,7 @@ class Student:
         self.name = name
         self.department = department
         self.registered_lecture_codes = [] # 강의 코드 담는 리스트
-        self.total_credits = 18
+        self.total_credits = 0
 
     def add_lecture(self, lecture_code):
         if lecture_code not in self.registered_lecture_codes:
