@@ -132,8 +132,8 @@ class TestApp:
             messagebox.showwarning("결과", "2개 이상 틀렸습니다. 퇴학입니다!")
         else:
             self.state = True
-            messagebox.showinfo("결과", "축하합니다! 합격입니다!")
-        print(f"최종 결과: {'합격' if self.state else '퇴학'}")
+            messagebox.showinfo("결과", "축하합니다! 졸업의 길이 보이기 시작했습니다!")
+        print(f"최종 결과: {'성공' if self.state else '퇴학'}")
 
 
 if __name__ == "__main__":
@@ -153,3 +153,4 @@ if __name__ == "__main__":
 
     app = TestApp(root, student)
     root.mainloop()
+

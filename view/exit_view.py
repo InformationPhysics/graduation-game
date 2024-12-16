@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from model.student import Student
 
 class ExitView(tk.Toplevel):
     def __init__(self, main_controller):
@@ -28,3 +29,4 @@ class ExitView(tk.Toplevel):
 
     def on_cancel(self):
         self.destroy()
+

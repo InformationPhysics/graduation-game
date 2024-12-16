@@ -61,3 +61,4 @@ class LectureTableView(tk.Toplevel):
             messagebox.showinfo("검색 결과", f"강의명: {lecture.name}, 학점: {lecture.credit}")
         else:
             messagebox.showerror("오류", "강의를 찾을 수 없습니다.")
+

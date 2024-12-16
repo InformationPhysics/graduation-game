@@ -1,3 +1,5 @@
+import sys
+sys.path.append("/Users/kim-shineui/graduation-game")
 from model.lecture import Lecture
 import threading
 

@@ -4,7 +4,7 @@ from view.lecture_table_view import LectureTableView
 from view.exit_view import ExitView
 from service.login_service import LoginService
 from controller.registration_controller import RegistrationController
-
+from model.student import Student
 class MainController:
     def __init__(self, main_view):
         self.main_view = main_view
