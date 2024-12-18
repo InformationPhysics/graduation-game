@@ -8,11 +8,6 @@ class LectureTableView(tk.Toplevel):
         self.title("강의 목록")
         self.geometry("800x400")
         self.create_widgets()
-        # 검색
-        self.search_entry = tk.Entry(self)
-        self.search_entry.pack(pady=5)
-        self.search_button = tk.Button(self, text="검색", command=self.search_lecture)
-        self.search_button.pack(pady=5)
 
     def create_widgets(self):
         self.lecture_table = ttk.Treeview(
@@ -53,12 +48,4 @@ class LectureTableView(tk.Toplevel):
                     lecture.max_students
                 )
             )
-
-    def search_lecture(self):
-        query = self.search_entry.get()
-        lecture = self.main_controller.find_lecture(query) # AttributeError
-        if lecture:
-            messagebox.showinfo("검색 결과", f"강의명: {lecture.name}, 학점: {lecture.credit}")
-        else:
-            messagebox.showerror("오류", "강의를 찾을 수 없습니다.")
 
