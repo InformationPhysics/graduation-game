@@ -1,15 +1,15 @@
 import sys
 sys.path.append("/Users/kim-shineui/graduation-game")
 from model.lecture import Lecture
-import threading
 
 class LectureManagementService:
+    """Lecture의 데이터를 불러오고 조회한다."""
+
     file_name = "resource/lecture_information.md"
 
     def __init__(self):
-        self.lectures_dict = {} # 키: 강의코드, 값: Lecture 객체
+        self.lectures_dict = {} # 키: 강의 코드, 값: Lecture 객체
         self.load_all_lectures()
-        self.class_lock = threading.Lock()
 
     def load_all_lectures(self):
         try:
@@ -28,27 +28,6 @@ class LectureManagementService:
 
         except FileNotFoundError:
             print(f"[ERROR] 파일 '{self.file_name}'을 찾을 수 없습니다.")
-
-    def add_subscription(self, lecture_code):
-        with self.class_lock:
-            lecture = self.lectures_dict.get(lecture_code)
-            if lecture and lecture.increment_students():
-                return lecture
-        return None
-
-    def cancel_subscription(self, lecture_code):
-        with self.class_lock:
-            lecture = self.lectures_dict.get(lecture_code)
-            if lecture:
-                lecture.decrement_students()
-
-    def auto_increment_subscriptions(self):
-        while True:
-            with self.class_lock:  # 락으로 보호하여 수강 인원 증가 작업 중에 데이터가 변경되지 않도록 함
-                for lecture in self.lectures_dict.values():
-                    if lecture.increment_students():
-                        pass
-            threading.Event().wait(1)  # 1초 대기
 
     def find_lecture_with_code(self, lec_code):
         return self.lectures_dict.get(lec_code)

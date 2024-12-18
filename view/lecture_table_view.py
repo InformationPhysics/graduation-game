@@ -56,7 +56,7 @@ class LectureTableView(tk.Toplevel):
 
     def search_lecture(self):
         query = self.search_entry.get()
-        lecture = self.main_controller.find_lecture(query)
+        lecture = self.main_controller.find_lecture(query) # AttributeError
         if lecture:
             messagebox.showinfo("검색 결과", f"강의명: {lecture.name}, 학점: {lecture.credit}")
         else:

@@ -5,6 +5,7 @@ class RegistrationView(tk.Toplevel):
     def __init__(self, main_controller):
         super().__init__()
         self.main_controller = main_controller
+        self.lecture_code_entry = None
 
     def open_registration_window(self):
         self.title("수강 신청")

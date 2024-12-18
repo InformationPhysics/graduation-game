@@ -3,6 +3,7 @@ from view.registration_view import RegistrationView
 from view.lecture_table_view import LectureTableView
 from view.exit_view import ExitView
 from service.login_service import LoginService
+from service.lecture_management import LectureManagementService
 from controller.registration_controller import RegistrationController
 from model.student import Student
 
@@ -15,7 +16,8 @@ class MainController:
         self.current_user = None
 
         self.registration_view = None
-        self.registration_controller = RegistrationController()
+        self.lecture_management = LectureManagementService()
+        self.registration_controller = RegistrationController(self.lecture_management)
 
         self.lecture_table_view = None
         self.exit_view = None
@@ -32,24 +34,24 @@ class MainController:
         self.current_user = self.login_service.get_login_student(student_id, password)
         return self.current_user
 
-    # 수강신청
+    # 수강 신청
     def open_registration_window(self):
         if not self.registration_view or not self.registration_view.winfo_exists():
             self.registration_view = RegistrationView(self)
             self.registration_view.open_registration_window()
-
-        self.registration_controller.start_auto_increment()
+            self.registration_controller.start_auto_increment()
 
     def start_registration(self, lecture_code):
-        return self.registration_controller.register_lecture(self.current_user, lecture_code)
-
-    def get_all_lectures(self):
-        return self.registration_controller.get_all_lectures()
+        return self.registration_controller.register_lecture_with_user(self.current_user, lecture_code)
 
     # 강의 조회
     def open_class_catalog(self):
         if not self.lecture_table_view or not self.lecture_table_view.winfo_exists():
             self.lecture_table_view = LectureTableView(self)
+
+    def get_all_lectures(self):
+        return self.lecture_management.get_all_lectures()
+
     # 종료
     def open_exit_window(self):
         if not self.exit_view or not self.exit_view.winfo_exists():

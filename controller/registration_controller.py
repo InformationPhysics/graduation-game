@@ -1,43 +1,46 @@
-from service.lecture_management import LectureManagementService
-from service.registration_management import RegistrationService
 import threading
 
 class RegistrationController:
-    def __init__(self):
-        self.current_user = None
-        self.lecture_management = LectureManagementService()
-        self.registration_service = RegistrationService()
+    def __init__(self, lecture_management):
+        self.lecture_management = lecture_management
+        self.register_lock = threading.Lock()
         self.auto_thread = None
 
-    def get_all_lectures(self):
-        return self.lecture_management.get_all_lectures()
+    def register_lecture_with_user(self, current_user, lecture_code):
+        """수강 가능할 때 강의 수강인원 증가, 학생의 수강 강의 리스트에 해당 강의를 추가한다"""
+
+        lecture = self.lecture_management.find_lecture_with_code(lecture_code)
+        if not lecture:
+            return False, f"[ERROR] {lecture_code}: 강의 코드를 찾을 수 없습니다."
+
+        with self.register_lock:
+            if lecture in current_user.registered_lectures:
+              return False, "[ERROR] 이미 수강하고 있는 강의입니다."
+            if current_user.total_credits + lecture.credit > 18:
+                return False, "[ERROR] 수강 가능 학점을 초과했습니다."
+            if lecture.current_students >= lecture.max_students:
+                return False, "[ERROR] 수강 인원이 초과되었습니다."
+
+            lecture.current_students += 1
+            current_user.add_lecture(lecture)
+            current_user.total_credits += lecture.credit
+
+            return True, f"[SUCCESS] 학생 {current_user.name}({current_user.student_id}): {lecture.name} 수강 신청 완료."
 
     def start_auto_increment(self):
+        """자동 증가 스레드 시작"""
         if not self.auto_thread or not self.auto_thread.is_alive():
             self.auto_thread = threading.Thread(
-                target=self.lecture_management.auto_increment_subscriptions,
+                target=self.auto_increment_subscriptions,
                 daemon=True
             )
             self.auto_thread.start()
 
-    def register_lecture(self, current_user, lecture_code):
-        self.current_user = current_user
-        lecture = self.lecture_management.find_lecture_with_code(lecture_code)
-
-        if not lecture:
-            return False, f"[ERROR] {lecture_code}: 강의 코드를 찾을 수 없습니다."
-
-        if self.current_user.total_credits + lecture.credit > 18:
-            return False, "수강 가능 학점을 초과했습니다."
-
-        success, msg = self.lecture_management.add_subscription(lecture_code)
-        if not success:
-            return False, msg
-
-        success_sg, msg_sg = self.registration_service.register_lecture_to_student(self.current_user, lecture_code)
-        if success_sg:
-            self.current_user.total_credits += lecture.credit
-            return True, msg_sg
-        else:
-            self.lecture_management.cancel_subscription(lecture_code)
-            return False, msg_sg
+    def auto_increment_subscriptions(self):
+        """강의의 현재 수강 인원을 자동으로 증가시킨다."""
+        while True:
+            with self.register_lock:
+                for lecture in self.lecture_management.get_all_lectures():
+                    if lecture.current_students < lecture.max_students:
+                        lecture.current_students += 1
+            threading.Event().wait(5)

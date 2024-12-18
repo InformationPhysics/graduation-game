@@ -4,17 +4,13 @@ class Student:
         self.password = password
         self.name = name
         self.department = department
-        self.registered_lecture_codes = [] # 강의 코드 담는 리스트
+        self.registered_lectures = [] # 강의 담는 리스트
         self.total_credits = 0
 
     def add_lecture(self, lecture_code):
-        if lecture_code not in self.registered_lecture_codes:
-            self.registered_lecture_codes.append(lecture_code)
+        if lecture_code not in self.registered_lectures:
+            self.registered_lectures.append(lecture_code)
 
-    def remove_lecture(self, lecture_code):
-        if lecture_code in self.registered_lecture_codes:
-            self.registered_lecture_codes.remove(lecture_code)
-
-# TODO 1: 학번 유효성 검사, 비밀번호 재확인, 비밀번호 안 보이게 하기
-
-
+    def remove_lecture(self, lecture):
+        if lecture in self.registered_lectures:
+            self.registered_lectures.remove(lecture)

@@ -55,7 +55,7 @@ class TestApp:
                     self.questions_dict[code] = self.questions_map_by_name[course_name]
 
         # 학생이 신청한 과목 중 문제 있는 과목 필터
-        self.selected_courses = [code for code in self.student.registered_lecture_codes if code in self.questions_dict]
+        self.selected_courses = [code for code in self.student.registered_lectures if code in self.questions_dict]
 
         self.current_exam = 0  # 현재 시험 인덱스
         self.create_main_ui()
