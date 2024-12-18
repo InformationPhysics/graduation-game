@@ -11,7 +11,5 @@ class App(tk.Tk):
         main_controller = MainController(main_view)
         main_view.set_controller(main_controller)
 
-
 if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+    App().mainloop()

@@ -1,43 +1,43 @@
 import tkinter as tk
 
-class Scenario:
+class Scenario(tk.Toplevel):
     def __init__(self, lines, pauses=None):
+        super().__init__()
         self.lines = lines
         self.pauses = pauses if pauses else []
         self.line_index = 0
         self.pause_index = 0
 
-        self.root = tk.Tk()
-        self.root.title("대화창")
-        self.text_widget = tk.Text(self.root, height=15, width=50)
+        self.title("대화창")
+        self.text_widget = tk.Text(self, height=15, width=50)
         self.text_widget.pack()
 
         # 객체 생성 시 바로 시작
         self._show_next_line()
-        self.root.mainloop()
+        self.mainloop()
 
     def _show_next_line(self):
         if self.line_index < len(self.lines):
             line = self.lines[self.line_index]
             if line == '' and self.pause_index < len(self.pauses):
-                msg, duration, dots = self.pauses[self.pause_index]
+                message, duration, dots = self.pauses[self.pause_index]
                 self.pause_index += 1
-                self._animate_pause(msg, duration, dots, self._show_next_line)
+                self._animate_pause(message, duration, dots, self._show_next_line)
             else:
                 self.text_widget.insert(tk.END, line + '\n')
                 self.line_index += 1
-                self.root.after(1000, self._show_next_line)
+                self.after(1000, self._show_next_line)
 
-    def _animate_pause(self, msg, duration, dots, callback):
+    def _animate_pause(self, message, duration, dots, callback):
         count = [0]
         def add_dot():
             if count[0] < dots:
-                self.text_widget.insert(tk.END, msg)
+                self.text_widget.insert(tk.END, message)
                 count[0] += 1
-                self.root.after(int(duration), add_dot)
+                self.after(int(duration), add_dot)
             else:
                 self.text_widget.insert(tk.END, '\n')
-                self.root.after(1000, callback)
+                self.after(1000, callback)
         add_dot()
 
 class Talk1(Scenario):
