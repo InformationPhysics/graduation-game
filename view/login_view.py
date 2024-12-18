@@ -1,12 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
-from service.login_service import LoginService
 
 class LoginView(tk.Toplevel):
     def __init__(self, main_controller):
         super().__init__()
         self.main_controller = main_controller
-        self.login_service = LoginService()
         self.id_entry = None
         self.password_entry = None
 
@@ -26,7 +24,6 @@ class LoginView(tk.Toplevel):
 
     def get_student_identification(self):
         student = self.main_controller.identify_login_student(self.id_entry.get(), self.password_entry.get())
-
         if student:
             messagebox.showinfo("로그인 성공", "[SUCCESS] 로그인 성공.")
             self.destroy()

@@ -5,6 +5,7 @@ from view.exit_view import ExitView
 from service.login_service import LoginService
 from controller.registration_controller import RegistrationController
 from model.student import Student
+
 class MainController:
     def __init__(self, main_view):
         self.main_view = main_view
@@ -28,11 +29,8 @@ class MainController:
             self.login_window.lift() # 창 있으면 최상위로 띄우기
 
     def identify_login_student(self, student_id, password):
-        student = self.login_service.login(student_id, password)
-        if student:
-            self.current_user = student
-            return student
-        return None
+        self.current_user = self.login_service.get_login_student(student_id, password)
+        return self.current_user
 
     # 수강신청
     def open_registration_window(self):
