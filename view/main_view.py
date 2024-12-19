@@ -26,6 +26,9 @@ class MainView(tk.Frame):
         if self.main_controller:
             self.main_controller.open_login_window()
 
+    def update_after_login(self, user_name):
+        self.login_button.config(text=user_name)
+
     def registration(self):
         if self.main_controller:
             self.main_controller.open_registration_window()

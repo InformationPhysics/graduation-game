@@ -51,17 +51,16 @@ class TestView(tk.Frame):
         if not valid:
             self.result_button = tk.Button(self, text="종료", command=self.main_controller.open_exit_window)
         else:
-            self.result_button = tk.Button(self, text="다음으로", command=self.handle_button_click)
+            self.result_button = tk.Button(self, text="졸업", command=self.handle_button_click)
 
         self.result_button.pack(pady=20)
 
     def handle_button_click(self):
         if self.button_click_count == 0:
             self.button_click_count += 1
-            self.main_controller.third_scenario()
+            self.main_controller.fourth_scenario()
         elif self.button_click_count == 1:
-            self.main_controller.open_toeic_window()
-
+            self.main_controller.open_exit_window()
 
     def clear_widgets(self):
         for widget in self.winfo_children():

@@ -26,6 +26,7 @@ class LoginView(tk.Toplevel):
         student = self.main_controller.identify_login_student(self.id_entry.get(), self.password_entry.get())
         if student:
             messagebox.showinfo("로그인 성공", "[SUCCESS] 로그인 성공.")
+            self.main_controller.get_user_name()
             self.destroy()
         else:
             messagebox.showerror("로그인 실패", "아이디 또는 비밀번호를 확인하세요.")

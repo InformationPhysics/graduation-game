@@ -1,5 +1,3 @@
-from pyexpat.errors import messages
-
 from view.login_view import LoginView
 from view.registration_view import RegistrationView
 from view.lecture_table_view import LectureTableView
@@ -11,7 +9,6 @@ from service.lecture_management import LectureManagementService
 from service.test_management import TestManagementService
 from controller.registration_controller import RegistrationController
 from controller.test_controller import TestController
-from toeic.TOEIC import TOEIC
 
 class MainController:
     def __init__(self, main_view):
@@ -39,8 +36,8 @@ class MainController:
     def second_scenario(self):
         Talk2()
 
-    def third_scenario(self):
-        Talk3()
+    # def third_scenario(self):
+    #     Talk3()
 
     def fourth_scenario(self):
         Talk4()
@@ -56,6 +53,9 @@ class MainController:
     def identify_login_student(self, student_id, password):
         self.current_user = self.login_service.get_login_student(student_id, password)
         return self.current_user
+
+    def get_user_name(self):
+        self.main_view.update_after_login(self.current_user.name)
 
     # 수강 신청
     def open_registration_window(self):
@@ -85,6 +85,7 @@ class MainController:
 
     def handle_exit(self):
         self.main_view.quit()
+        self.test_view.quit()
 
     # 시험
     def open_test_window(self):
@@ -106,7 +107,3 @@ class MainController:
     # 유저 정보 갱신
     def update_user_info(self, updated_user):
         self.current_user = updated_user
-
-    # 토익
-    def open_toeic_window(self):
-        TOEIC()

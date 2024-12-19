@@ -86,7 +86,6 @@ class Talk3(Scenario):
 class Talk4(Scenario):
     def __init__(self):
         lines = [
-            '토익이 개정되어 듣기가 사라졌다니 운이 좋았군',
             '6년이라는 긴 세월..드디어 학교를 떠나는군..',
             '성인의 시작부터 지금까지 함께해온 학교야 고마워 이젠 안녕~'
         ]
