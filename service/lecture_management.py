@@ -28,6 +28,7 @@ class LectureManagementService:
 
         except FileNotFoundError:
             print(f"[ERROR] 파일 '{self.file_name}'을 찾을 수 없습니다.")
+            sys.exit("프로그램을 종료합니다.")
 
     def find_lecture_with_code(self, lec_code):
         return self.lectures_dict.get(lec_code)

@@ -1,11 +1,16 @@
+from pyexpat.errors import messages
+
 from view.login_view import LoginView
 from view.registration_view import RegistrationView
 from view.lecture_table_view import LectureTableView
 from view.exit_view import ExitView
+from view.test_view import TestView
+from view.talking_view import *
 from service.login_service import LoginService
 from service.lecture_management import LectureManagementService
+from service.test_management import TestManagementService
 from controller.registration_controller import RegistrationController
-from model.student import Student
+from controller.test_controller import TestController
 
 class MainController:
     def __init__(self, main_view):
@@ -17,10 +22,27 @@ class MainController:
 
         self.registration_view = None
         self.lecture_management = LectureManagementService()
-        self.registration_controller = RegistrationController(self.lecture_management)
+        self.registration_controller = RegistrationController(self.lecture_management, self)
 
         self.lecture_table_view = None
         self.exit_view = None
+
+        self.test_view = None
+        self.test_management = TestManagementService(self.lecture_management)
+        self.test_controller = None
+
+    # 시나리오
+    def first_scenario(self):
+        Talk1()
+
+    def second_scenario(self):
+        Talk2()
+
+    def third_scenario(self):
+        Talk3()
+
+    def fourth_scenario(self):
+        Talk4()
 
     # 로그인
     def open_login_window(self):
@@ -39,7 +61,8 @@ class MainController:
         if not self.registration_view or not self.registration_view.winfo_exists():
             self.registration_view = RegistrationView(self)
             self.registration_view.open_registration_window()
-            self.registration_controller.start_auto_increment()
+            self.registration_controller.start_auto_increment() # 수강인원 자동 증가
+            self.main_view.enable_test_button() # 테스트 버튼 활성화
 
     def start_registration(self, lecture_code):
         return self.registration_controller.register_lecture_with_user(self.current_user, lecture_code)
@@ -61,3 +84,24 @@ class MainController:
 
     def handle_exit(self):
         self.main_view.quit()
+
+    # 시험
+    def open_test_window(self):
+        self.test_view = TestView(self.main_view.master, self)
+        self.test_view.pack()
+        self.test_controller = TestController(self, self.test_management)
+        self.main_view.pack_forget()  # MainView를 숨김
+
+    def get_lecture_test(self):
+        return self.test_controller.get_registered_exams()
+
+    def submit_answer(self, user_answer):
+        valid, message = self.test_controller.submit_answer(user_answer)
+        return valid, message
+
+    def get_exam_result(self):
+        return self.test_controller.finalize_exam()
+
+    # 유저 정보 갱신
+    def update_user_info(self, updated_user):
+        self.current_user = updated_user

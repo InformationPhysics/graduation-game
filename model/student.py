@@ -7,9 +7,9 @@ class Student:
         self.registered_lectures = [] # 강의 담는 리스트
         self.total_credits = 0
 
-    def add_lecture(self, lecture_code):
-        if lecture_code not in self.registered_lectures:
-            self.registered_lectures.append(lecture_code)
+    def add_lecture(self, lecture):
+        if lecture not in self.registered_lectures:
+            self.registered_lectures.append(lecture)
 
     def remove_lecture(self, lecture):
         if lecture in self.registered_lectures:

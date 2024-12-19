@@ -27,6 +27,7 @@ class LoginService:
                 self.is_data_loaded = True
         except FileNotFoundError:
             print(f"[ERROR] 파일 '{self.file_name}'을 찾을 수 없습니다.")
+            sys.exit("프로그램을 종료합니다.")
         return None
 
     def get_login_student(self, input_id, input_password):

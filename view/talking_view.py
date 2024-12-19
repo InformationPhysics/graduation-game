@@ -11,9 +11,9 @@ class Scenario(tk.Toplevel):
         self.title("대화창")
         self.text_widget = tk.Text(self, height=15, width=50)
         self.text_widget.pack()
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
 
-        # 객체 생성 시 바로 시작
-        self._show_next_line()
+        self._show_next_line()  # 객체 생성 시 바로 시작
         self.mainloop()
 
     def _show_next_line(self):
@@ -39,6 +39,9 @@ class Scenario(tk.Toplevel):
                 self.text_widget.insert(tk.END, '\n')
                 self.after(1000, callback)
         add_dot()
+
+    def _on_close(self):
+        self.destroy()
 
 class Talk1(Scenario):
     def __init__(self):

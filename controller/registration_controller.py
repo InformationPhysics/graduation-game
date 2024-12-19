@@ -1,8 +1,9 @@
 import threading
 
 class RegistrationController:
-    def __init__(self, lecture_management):
+    def __init__(self, lecture_management, main_controller):
         self.lecture_management = lecture_management
+        self.main_controller = main_controller
         self.register_lock = threading.Lock()
         self.auto_thread = None
 
@@ -25,11 +26,12 @@ class RegistrationController:
             current_user.add_lecture(lecture)
             current_user.total_credits += lecture.credit
 
+            self.main_controller.update_user_info(current_user)
             return True, f"[SUCCESS] 학생 {current_user.name}({current_user.student_id}): {lecture.name} 수강 신청 완료."
 
     def start_auto_increment(self):
         """자동 증가 스레드 시작"""
-        if not self.auto_thread or not self.auto_thread.is_alive():
+        if not self.auto_thread or not self.auto_thread.is_alive(): # 체크
             self.auto_thread = threading.Thread(
                 target=self.auto_increment_subscriptions,
                 daemon=True
