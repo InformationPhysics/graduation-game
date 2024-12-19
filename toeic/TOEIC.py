@@ -4,28 +4,28 @@ from PIL import Image, ImageTk
 import base64
 from io import BytesIO
 
+
 class TOEIC:
     def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("OMR Viewer")
+
         # Base64로 인코딩된 이미지 데이터
-        from image_texted import encoded_image
+        from toeic.image_texted import encoded_image
         image_data = encoded_image
 
         # Base64 문자열을 이미지로 디코딩
         image_bytes = base64.b64decode(image_data)
         image = Image.open(BytesIO(image_bytes))
-
-        self.root = tk.Tk()
-        self.root.title("OMR Viewer")
+        self.photo = ImageTk.PhotoImage(image)
 
         # 이미지 프레임 생성
         image_frame = tk.Frame(self.root)
         image_frame.pack(side='left')
 
-        photo = ImageTk.PhotoImage(image)
-
-        canvas = tk.Canvas(image_frame, width=photo.width(), height=photo.height())
+        canvas = tk.Canvas(image_frame, width=self.photo.width(), height=self.photo.height())
         canvas.pack()
-        canvas.create_image(0, 0, anchor='nw', image=photo)
+        canvas.create_image(0, 0, anchor='nw', image=self.photo)
 
         # 이하 코드는 원본과 동일
         omr_frame = tk.Frame(self.root)
@@ -33,7 +33,7 @@ class TOEIC:
 
         questions = [101, 102, 103, 104]
         options = ['A', 'B', 'C', 'D']
-        correct_answers = ['D', 'A', 'B', 'C']
+
         user_answers = {}
 
         tk.Label(omr_frame, text="정답을 선택하세요").grid(row=0, column=0, columnspan=5, pady=10)
@@ -48,6 +48,7 @@ class TOEIC:
                 ).grid(row=i + 1, column=j + 1, padx=5)
 
         def submit_answers():
+            correct_answers = ['D', 'A', 'B', 'C']
             correct_count = 0
             for q_index, question in enumerate(questions):
                 user_answer = user_answers[question].get()

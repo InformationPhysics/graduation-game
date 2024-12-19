@@ -9,6 +9,7 @@ class TestView(tk.Frame):
         self.pack()
         self.main_controller = main_controller
         self.current_exam_index = 0
+        self.button_click_count = 0
 
         self.start_button = tk.Button(self, text="시험 시작", font=("Helvetica", 12), command=self.start_exam)
         self.start_button.pack(pady=20)
@@ -50,9 +51,17 @@ class TestView(tk.Frame):
         if not valid:
             self.result_button = tk.Button(self, text="종료", command=self.main_controller.open_exit_window)
         else:
-            self.result_button = tk.Button(self, text="다음 시나리오", command=self.main_controller.third_scenario)
+            self.result_button = tk.Button(self, text="다음으로", command=self.handle_button_click)
 
         self.result_button.pack(pady=20)
+
+    def handle_button_click(self):
+        if self.button_click_count == 0:
+            self.button_click_count += 1
+            self.main_controller.third_scenario()
+        elif self.button_click_count == 1:
+            self.main_controller.open_toeic_window()
+
 
     def clear_widgets(self):
         for widget in self.winfo_children():

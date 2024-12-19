@@ -11,6 +11,7 @@ from service.lecture_management import LectureManagementService
 from service.test_management import TestManagementService
 from controller.registration_controller import RegistrationController
 from controller.test_controller import TestController
+from toeic.TOEIC import TOEIC
 
 class MainController:
     def __init__(self, main_view):
@@ -105,3 +106,7 @@ class MainController:
     # 유저 정보 갱신
     def update_user_info(self, updated_user):
         self.current_user = updated_user
+
+    # 토익
+    def open_toeic_window(self):
+        TOEIC()
